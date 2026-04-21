@@ -22,9 +22,18 @@ app.get('/api/test', (req, res) => {
 });
 
 // Routes
-const postRoutes = require('./routes/post.route');
-app.use('/api', postRoutes);
+// const postRoutes = require('./routes/posts.route');
+// const conversationRoute = require('../routes/conversation.route')
+ const allRoutes = require('./routes/index.route.js')
 
+// app.use('/api', postRoutes);
+// app.use('/api', conversationRoute)
+app.use('/api', allRoutes)
+
+
+app.use((err, req, res, next) => {
+  res.status(err.status).send(err.message)
+})
 
 module.exports = app;
 
