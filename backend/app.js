@@ -1,14 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const errorMiddleware = require('./middlewares/error.middleware.js')
 require('dotenv').config();
 const { connect } = require('./config/db.mongo.connect');
+const cookieParser = require('cookie-parser')
+
 
 const app = express();
 
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
+app.use(cookieParser())
 
 // Connexion à MongoDB
 connect().catch(err => {
@@ -31,9 +35,8 @@ app.get('/api/test', (req, res) => {
 app.use('/api', allRoutes)
 
 
-app.use((err, req, res, next) => {
-  res.status(err.status).send(err.message)
-})
+app.use(errorMiddleware)
+
 
 module.exports = app;
 

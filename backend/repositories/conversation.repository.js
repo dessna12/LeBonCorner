@@ -11,7 +11,6 @@ const conversationRepository = {
 
 async function findAll(){
   const result = await ConversationModel.find()
-  console.log(result)
   return result
 }
 
