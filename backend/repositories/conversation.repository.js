@@ -33,7 +33,7 @@ async function addMessage(conversationId, message){
 }
 
 async function addReaction(conversationId, messageId, reaction){
-  return await ConversationModel.findByIdAndUpdate(
+  return await ConversationModel.findOneAndUpdate(
     {_id: conversationId, 'messages_id': messageId },
     {$push :{ 'messages.$.reactions': reaction}},
     {new : true}
