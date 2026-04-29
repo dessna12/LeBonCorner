@@ -74,7 +74,6 @@ async function login(req, res, next){
 }
 
 async function refresh(req, res, next){
-
   try {
     const refreshTokenOld = req.cookies.refreshToken
     if (!refreshTokenOld) throw new UnauthorizedError('Refresh token manquant')

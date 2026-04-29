@@ -6,7 +6,7 @@ CREATE TABLE User (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    creation_date DATE NOT NULL
+    creation_date DEFAULT NOW DATE NOT NULL
 );
 
 
