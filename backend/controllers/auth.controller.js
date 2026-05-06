@@ -17,17 +17,31 @@ const COOKIE_OPTIONS = {
   maxAge: 7 * 24 * 60 * 60 * 1000
 }
 
+function generateTokens(payload){
+    const accessToken=jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '15m'}
+    )
 
+    const refreshToken=jwt.sign(
+      payload,
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: '7D'}
+    )
+
+    return { accessToken, refreshToken }
+}
 
 async function register(req, res, next){
   try {
 
     const {email, password, name} = req.body
 
-    if(!email || !password) throw AppError('email ou mot de passe manquant', 400)
+    if(!email || !password) throw new AppError('email ou mot de passe manquant', 400)
 
-    const userExists = userRepository.findByEmail(email)
-    if (!userExists) throw new AppError('La personne existe déjà', 409) 
+    const userExists = await userRepository.findByEmail(email)
+    if (userExists) throw new AppError('La personne existe déjà', 409) 
     
     const saltRound= 10
     const hashpassword = await bcrypt.hash(password, saltRound)
@@ -54,17 +68,18 @@ async function login(req, res, next){
 
     if(!isValid) throw new UnauthorizedError('email ou mot de passe invalide')
     
-    const accessToken=jwt.sign(
-      {id : user.id},
-      process.env.JWT_SECRET,
-      { expiresIn: '15m'}
-    )
+    // const accessToken=jwt.sign(
+    //   {id : user.id},
+    //   process.env.JWT_SECRET,
+    //   { expiresIn: '15m'}
+    // )
 
-    const refreshToken=jwt.sign(
-      {id : user.id},
-      process.env.JWT_REFRESH_SECRET,
-      { expiresIn: '7D'}
-    )
+    // const refreshToken=jwt.sign(
+    //   {id : user.id},
+    //   process.env.JWT_REFRESH_SECRET,
+    //   { expiresIn: '7D'}
+    // )
+    const { accessToken, refreshToken } = generateTokens({ id : user.id, name:user.name})
 
     res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS)
     res.status(200).json({accessToken})
@@ -87,17 +102,19 @@ async function refresh(req, res, next){
 
     const user= await userRepository.findById(payload.id)
  
-    const accessToken=jwt.sign(
-      {id : user.id},
-      process.env.JWT_SECRET,
-      { expiresIn: '15m'}
-    )
+    // const accessToken=jwt.sign(
+    //   {id : user.id},
+    //   process.env.JWT_SECRET,
+    //   { expiresIn: '15m'}
+    // )
 
-    const refreshToken=jwt.sign(
-      {id : user.id},
-      process.env.JWT_REFRESH_SECRET,
-      { expiresIn: '7D'}
-    )
+    // const refreshToken=jwt.sign(
+    //   {id : user.id},
+    //   process.env.JWT_REFRESH_SECRET,
+    //   { expiresIn: '7D'}
+    // )
+
+    const { accessToken, refreshToken } = generateTokens({ id : user.id})
 
     res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS)
     res.status(200).json({accessToken})

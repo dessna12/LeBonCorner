@@ -25,6 +25,12 @@ app.get('/api/test', (req, res) => {
   res.send('test');
 });
 
+
+app.use((req, res, next) => {
+  console.log("URL reçue :", req.url);
+  next();
+});
+
 // Routes
 // const postRoutes = require('./routes/posts.route');
 // const conversationRoute = require('../routes/conversation.route')
