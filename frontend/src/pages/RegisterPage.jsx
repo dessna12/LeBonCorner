@@ -19,8 +19,8 @@ export default function RegisterPage() {
     try {
       await register(form.name, form.email, form.password)
       navigate('/')
-    } catch (err) {
-      setError(err.response?.data?.message || "Erreur lors de l'inscription")
+    } catch (err) {     
+      setError(err.response?.data?.error || "Erreur lors de l'inscription")
     }
   }
 

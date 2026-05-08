@@ -18,9 +18,10 @@ export default function LoginPage() {
     setError(null)
     try {
       await login(form.email, form.password)
-      Navigation('/')
+      navigate('/')
     } catch (err) {
-      setError(err.response?.data?.message || 'Identifiants incorrects')
+      console.log(err)
+      setError(err.response?.data?.error || 'Identifiants incorrects')
     }
   }
 

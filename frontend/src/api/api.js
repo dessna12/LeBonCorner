@@ -18,9 +18,8 @@ api.interceptors.request.use((config) => {
 })
 
 
-api.interceptors.response.use((response) => {
-
-  (response) => response
+api.interceptors.response.use(
+  (response) => response,
 
   async (error)=> {
     const originalRequest = error.config
@@ -38,8 +37,7 @@ api.interceptors.response.use((response) => {
       }
     return Promise.reject(error)
   }
-
-})
+)
 
 export default api 
 

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import api, { setAccessToken } from "../api/api";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext(null)
 
@@ -15,7 +15,6 @@ export function AuthProvider({children}){
       id: decoded.id,
       email: decoded.name,
     };
-    console.log(user)
     setUser(user)
   }
 
@@ -24,7 +23,7 @@ export function AuthProvider({children}){
   }
 
   async function logout() {
-    await api.post('/auth/logout', null, { withCredentials })
+    await api.post('/auth/logout', null, { withCredentials : true })
     setAccessToken(null)
     setUser(null)
   }

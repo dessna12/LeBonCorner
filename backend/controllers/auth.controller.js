@@ -7,7 +7,8 @@ const userRepository = require('../repositories/user.repository')
 const authController = {
   register,
   login,
-  refresh
+  refresh, 
+  logout
 }
 
 const COOKIE_OPTIONS = {
@@ -62,7 +63,7 @@ async function login(req, res, next){
 
     const user = await userRepository.findByEmail(email)
 
-    if(!user) throw UnauthorizedError('email ou mot de passe invalide')
+    if(!user) throw new UnauthorizedError('email ou mot de passe invalide')
 
     const isValid = bcrypt.compare(password, user.password)
 
@@ -122,6 +123,11 @@ async function refresh(req, res, next){
   }catch(error){
     next(error)
   }
+}
+
+async function logout(req, res) {
+  res.clearCookie('refreshToken', COOKIE_OPTIONS);
+  res.json({ message: 'Déconnecté' });
 }
 
 module.exports=authController

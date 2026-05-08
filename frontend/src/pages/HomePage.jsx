@@ -24,6 +24,6 @@ export default function HomePage() {
 }
 
 const styles = {
-  container: { maxWidth: 600, margin: '80px auto', fontFamily: 'sans-serif', padding: '0 16px' },
+  container: { maxWidth: 700, margin: '80px auto', fontFamily: 'sans-serif', padding: '0 16px' },
   button: { padding: '10px 20px', fontSize: 16, background: '#dc2626', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' },
 }
