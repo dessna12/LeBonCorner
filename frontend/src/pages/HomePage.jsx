@@ -1,8 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import AnnonceList from '../components/AnnonceList'
+import { useAnnonces } from '../hooks/useAnnonces'
+import SearchFilterBar from '../components/SearchFilterBar'
 
 export default function HomePage() {
   const { user, logout } = useAuth()
+  const { annonces, isLoading, isError, search, setSearch, annoncesFiltrees } = useAnnonces()
   const navigate = useNavigate()
 
   async function handleLogout() {
@@ -16,6 +20,14 @@ export default function HomePage() {
       <p>
         Connecté en tant que : <strong>{user?.name}</strong> ({user?.email})
       </p>
+
+
+      <h2>Les Annonces</h2>
+      <SearchFilterBar search={search} setSearch={setSearch} />
+      {isLoading && <span> Chargement ... </span>}
+      {error && <span> Error : {error} </span>}
+      {!isLoading && !isError && <AnnonceList annonces={annonces} />}
+
       <button onClick={handleLogout} style={styles.button}>
         Se déconnecter
       </button>
