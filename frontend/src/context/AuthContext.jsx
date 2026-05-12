@@ -15,6 +15,7 @@ export function AuthProvider({children}){
       id: decoded.id,
       email: decoded.name,
     };
+    console.log(user)
     setUser(user)
   }
 

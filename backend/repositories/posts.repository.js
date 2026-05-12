@@ -37,30 +37,31 @@ async function findByCategory(categoryId) {
 
 // Search posts
 async function search({ q, categoryId, minPrice, maxPrice }) {
-  let sql = 'SELECT * FROM Post WHERE 1=1'
+  console.log('ici')
+  let sql = 'SELECT * FROM Post WHERE 1=1 ';
   const params = []
 
   if(q){
-    sql+= 'AND (title LIKE ? OR description LIKE ?)';
+    sql += 'AND (title LIKE ? OR description LIKE ?)';
     params.push(`%${q}%`, `%${q}%`)
   }
 
   if(categoryId){
-    sql+= 'AND category_id=?';
+    sql += 'AND category_id=?';
     params.push(Number(categoryId))
   }
 
   if(minPrice){
-    sql+= 'AND price >=?';
+    sql += 'AND price >=?';
     params.push(Number(minPrice))
   }
 
   if(maxPrice){
-    sql+= 'AND price <=?';
+    sql += 'AND price <=?';
     params.push(Number(maxPrice))
   }
 
-  const [rows]=db.execute(sql, params)
+  const [rows]= await db.execute(sql, params) 
   return rows;
 }
 

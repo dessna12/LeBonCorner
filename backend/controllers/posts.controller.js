@@ -56,7 +56,6 @@ async function search(req, res) {
     minPrice:min_price,
     maxPrice:max_price
   })
-
   if(posts) {
     res.status(200).json(posts)
   }else{

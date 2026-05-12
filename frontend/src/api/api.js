@@ -24,7 +24,7 @@ api.interceptors.response.use(
   async (error)=> {
     const originalRequest = error.config
 
-      if(error.response?.status===401 && !originalrequest.once) {
+      if(error.response?.status===401 && !originalRequest.once) {
         originalRequest.once=true
         try{
           const { data } = await api.post('/auth/refresh', null, { withCredentials: true })
