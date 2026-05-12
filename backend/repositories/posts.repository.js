@@ -5,6 +5,7 @@ const postRepository = {
   findById,
   findByUser,
   findByCategory,
+  search,
   create,
   update,
   remove
@@ -33,6 +34,36 @@ async function findByCategory(categoryId) {
   const [rows] = await db.execute('SELECT * FROM Post WHERE category_id = ?', [categoryId]);
   return rows;
 }
+
+// Search posts
+async function search({ q, categoryId, minPrice, maxPrice }) {
+  let sql = 'SELECT * FROM Post WHERE 1=1'
+  const params = []
+
+  if(q){
+    sql+= 'AND (title LIKE ? OR description LIKE ?)';
+    params.push(`%${q}%`, `%${q}%`)
+  }
+
+  if(categoryId){
+    sql+= 'AND category_id=?';
+    params.push(Number(categoryId))
+  }
+
+  if(minPrice){
+    sql+= 'AND price >=?';
+    params.push(Number(minPrice))
+  }
+
+  if(maxPrice){
+    sql+= 'AND price <=?';
+    params.push(Number(maxPrice))
+  }
+
+  const [rows]=db.execute(sql, params)
+  return rows;
+}
+
 
 // Create post
 async function create({ title, description, price, location, publication_date, user_id, category_id }) {

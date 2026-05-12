@@ -5,6 +5,7 @@ const postController = {
   getById,
   getByCategory,
   getByUser,
+  search,
   create,
   update,
   remove,
@@ -44,6 +45,22 @@ async function getByCategory(req, res) {
     res.json(posts);
   } else {
     res.status(404).json({ message: "Post not found" });
+  }
+}
+
+async function search(req, res) {
+  const { q , category_id, min_price, max_price } = req.query
+  const posts = await postRepository.search({
+    q,
+    categoryId:category_id,
+    minPrice:min_price,
+    maxPrice:max_price
+  })
+
+  if(posts) {
+    res.status(200).json(posts)
+  }else{
+    res.status(404).json({message: "No post found"})
   }
 }
 

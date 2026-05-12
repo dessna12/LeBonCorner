@@ -12,8 +12,6 @@ export default function SearchFilterBar({
       style={StyleSheet.inputMain }
       />
     </div>
-
-
   )
 }
 
