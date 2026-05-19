@@ -3,12 +3,15 @@ const bcrypt = require('bcrypt')
 const UnauthorizedError = require("../errors/UnauthorizedError")
 const jwt = require('jsonwebtoken')
 const userRepository = require('../repositories/user.repository')
+const { sendWelcomeEmail, sendResetPasswordMail } = require("../services/mail.service")
+const crypto = require('crypto')
 
 const authController = {
   register,
   login,
   refresh, 
-  logout
+  logout,
+  resetPassword
 }
 
 const COOKIE_OPTIONS = {
@@ -48,6 +51,9 @@ async function register(req, res, next){
     const hashpassword = await bcrypt.hash(password, saltRound)
 
     const user = await userRepository.create({email, password : hashpassword, name, creation_date : Date.now() })
+    
+    sendWelcomeEmail(email, name)
+    
     res.status(201).json({message: 'Utilisateur créé'})
 
   }catch(error){
@@ -129,5 +135,51 @@ async function logout(req, res) {
   res.clearCookie('refreshToken', COOKIE_OPTIONS);
   res.json({ message: 'Déconnecté' });
 }
+
+
+async function forgotPassword(req, res, next){
+ 
+  const {email} = req.body
+
+  try{
+    const token = crypto.randomBytes(32).toString('hex')
+    const expiryDate = new Date(Date.now()+ 60 * 60 * 1000) //+1h
+    
+    await userRepository.saveResetToken(token, expiryDate)
+  
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`
+    await sendResetPasswordMail(email, resetUrl)
+  
+    res.status(200).json({message: 'Vous avez reçu un email de réinitialisation'})
+  }catch(err){
+    next(err)
+  }
+}
+
+
+async function resetPassword(req, res, next){
+  try{
+    const { token, password } = req.body
+
+    const user = await userRepository.findByResetToken(token)
+    if (!user) throw new AppError('Lien invalide', 400)
+
+    const isExpired = new Date(user.reset_token_expiry) < new Date();
+    if(isExpired) throw new AppError('Le lien a expiré faites une nouvelle demande', 400)
+
+    const saltRound= 10
+    const hashpassword = await bcrypt.hash(password, saltRound)
+
+    await userRepository.updatePassword(user.id, hashpassword)
+
+    res.status(200).json({message : 'Mot de passe mis à jour avec succès'})
+
+  }catch(err){
+    next(err)
+  }
+}
+
+
+
 
 module.exports=authController

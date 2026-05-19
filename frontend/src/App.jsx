@@ -8,10 +8,13 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import HomePage from './pages/HomePage'
 import PrivateRoute from './components/PrivateRoute'
+import AccessibilityPanel from './components/AccessibilityPanel'
 
 function App() {
 
   return (
+    <>
+    <AccessibilityPanel />
     <Routes>
       <Route path='/login' element={<LoginPage />} />
       <Route path='/register' element={<RegisterPage />} />
@@ -23,6 +26,7 @@ function App() {
       }
       />
     </Routes>
+    </>
   )
 }
 
