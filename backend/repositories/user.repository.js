@@ -5,7 +5,8 @@ const userRepository = {
   findById,
   findByResetToken,
   create,
-  updatePassword
+  updatePassword,
+  saveResetToken
 };
 
 async function findByEmail(email) {
@@ -32,7 +33,14 @@ async function create({ name, email, password }) {
 }
 
 async function updatePassword(id, hashPassword){
-  await db.execute('UPDATE User SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE id= ?', [hashPassword, id])
+  await db.execute('UPDATE User SET password = ?, reset_token = NULL, reset_token_validity = NULL WHERE id= ?', [hashPassword, id])
+}
+
+async function saveResetToken(email, token, expiresAt) {
+  await db.execute(
+    'UPDATE User SET reset_token = ?, reset_token_validity = ? WHERE email = ?',
+    [token, expiresAt, email]
+  );
 }
 
 module.exports = userRepository;

@@ -11,7 +11,8 @@ const authController = {
   login,
   refresh, 
   logout,
-  resetPassword
+  resetPassword,
+  forgotPassword
 }
 
 const COOKIE_OPTIONS = {
@@ -145,7 +146,7 @@ async function forgotPassword(req, res, next){
     const token = crypto.randomBytes(32).toString('hex')
     const expiryDate = new Date(Date.now()+ 60 * 60 * 1000) //+1h
     
-    await userRepository.saveResetToken(token, expiryDate)
+    await userRepository.saveResetToken(email, token, expiryDate)
   
     const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`
     await sendResetPasswordMail(email, resetUrl)
