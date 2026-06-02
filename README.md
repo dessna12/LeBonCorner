@@ -1,126 +1,169 @@
- # LeBonCorner
+# LeBonCorner
 
-Projet pédagogique – Plateforme de petites annonces
+Plateforme de petites annonces fullstack — les utilisateurs peuvent publier, rechercher et contacter des vendeurs via une messagerie intégrée.
 
-**Type** : application inspirée du fonctionnement de Leboncoin
-**Objectif pédagogique** : Le projet est structuré en 12 modules indépendants permettant à l’apprenant d’identifier ses lacunes et de travailler spécifiquement les compétences associées. Chaque module peut être réalisé séparément, puis intégré dans un projet final global.
-**Durée indicative par module** : 1 à 2 jours
+---
 
+## Stack
 
+| | |
+|---|---|
+| **Backend** | Node.js · Express 5 · MySQL · MongoDB · JWT · Nodemailer · Joi |
+| **Frontend** | React 18 · Vite · React Router v6 · Axios |
 
-## Technologies possibles
-### Backend:
--	Node.js + Express
--	Node.js + ESM
--	PHP
+---
 
-### Frontend:
--	React
--	Vue
--	Next.js
--	EJS
--	Twig
+## Fonctionnalités
 
-### Base de données:
--	SQL (MySQL / PostgreSQL)
--	MongoDB
+- Inscription / Connexion / Déconnexion
+- Refresh automatique du token (intercepteur Axios)
+- Réinitialisation du mot de passe par email
+- Gestion du profil (modifier nom/email, supprimer son compte)
+- Publication, modification et suppression d'annonces
+- Recherche et filtrage par texte, catégorie et fourchette de prix
+- Messagerie entre utilisateurs (conversations + réactions)
+- Panneau d'accessibilité (contraste élevé, zoom texte, niveaux de gris)
 
-### UI:
--	Bootstrap
--	Tailwind CSS
--	CSS natif
- 
-## MODULE 1 – Analyse du besoin et architecture
+---
 
-Objectif pédagogique : Comprendre le projet, définir les fonctionnalités et structurer un projet web.
-Énoncé : Créer l’architecture d’une plateforme de petites annonces. Définir les pages nécessaires, la structure backend/frontend et les principales entités de données.
-Livrables : Document avec arborescence du projet, schéma de données, liste des routes et wireframes simples.
-Astuces : Commencez par identifier les pages et fonctionnalités principales. Utilisez des croquis ou Figma pour les wireframes.
-Ressources :
-https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps https://www.figma.com
+## Prérequis
 
+- Node.js ≥ 18
+- MySQL
+- MongoDB (local ou Atlas)
+- Un compte Gmail avec un [mot de passe d'application](https://myaccount.google.com/apppasswords)
 
+---
 
-## MODULE 2 – Mise en place du serveur backend
-Objectif pédagogique : Créer un serveur backend fonctionnel capable de recevoir et traiter des requêtes.
-Énoncé : Mettre en place un serveur Node.js ou PHP avec au moins une route API test.
-Livrables : Serveur fonctionnel avec README expliquant le lancement du projet.
-Astuces : Testez votre serveur avec une route simple GET /api/test. Installez Express pour Node.js.
-Ressources : https://nodejs.org/en/docs https://expressjs.com
- 
-## MODULE 3 – Conception de la base de données
-Objectif pédagogique : Créer une base de données structurée pour stocker utilisateurs, annonces et messages.
-Énoncé : Créer les tables/collections Utilisateur, Annonce et Message avec les champs essentiels.
-Livrables : Script SQL ou modèle MongoDB + schéma de base. Astuces : Définir les relations : 1 utilisateur → plusieurs annonces.
-Ressources : https://sqlbolt.com https://www.mongodb.com/docs
+## Installation
 
-## MODULE 4 – CRUD des annonces
-Objectif pédagogique : Implémenter les opérations Create, Read, Update, Delete pour les annonces.
-Énoncé : Créer les routes : POST /annonces, GET /annonces, GET
-/annonces/:id, PUT /annonces/:id, DELETE /annonces/:id.
-Livrables : API CRUD fonctionnelle testée via Postman ou Insomnia.
-Astuces : Tester chaque route avec des données simples avant d’ajouter la base complète.
-Ressources : https://restfulapi.net
- 
-## MODULE 5 – Authentification utilisateur
-Objectif pédagogique : Permettre aux utilisateurs de s’inscrire, se connecter et gérer leur session.
-Énoncé : Créer POST /register et POST /login avec gestion sécurisée des mots de passe.
-Livrables : API d’authentification fonctionnelle avec JWT ou sessions.
-Astuces : Utilisez bcrypt pour le hash des mots de passe et jsonwebtoken pour la gestion des tokens.
-Ressources : https://jwt.io https://www.npmjs.com/package/bcrypt
+### Backend
 
-## MODULE 6 – Interface utilisateur (Frontend)
-Objectif pédagogique : Créer les pages web pour interagir avec le backend.
-Énoncé : Pages à créer : liste annonces, détail annonce, formulaire création, inscription, connexion.
-Livrables : Frontend fonctionnel connecté à l’API backend.
-Astuces : Commencez par des pages statiques puis connectez-les à l’API avec Axios ou fetch.
-Ressources : https://react.dev https://vuejs.org
- 
-## MODULE 7 – Recherche et filtres
-Objectif pédagogique : Mettre en place un moteur de recherche et des filtres pour les annonces.
-Énoncé : Fonctionnalités : recherche texte, filtrage par catégorie et prix. Livrables : Interface avec fonctionnalité recherche opérationnelle.
-Astuces : Commencez par filtrer localement avant d’implémenter côté serveur.
-Ressources : https://uxpatterns.dev
+```bash
+cd backend
+npm install
+cp .env.example .env
+```
 
-## MODULE 8 – Envoi d’emails
-Objectif pédagogique : Permettre l’envoi d’emails depuis le site.
-Énoncé : Créer formulaire Contact vendeur avec envoi d’email via Nodemailer.
-Livrables : Email envoyé et reçu correctement.
-Astuces : Tester en local avec Mailtrap ou compte Gmail dédié. Ressources : https://nodemailer.com
- 
-## MODULE 9 – Upload d’images
-Objectif pédagogique : Permettre d’ajouter des images aux annonces.
-Énoncé : Chaque annonce doit pouvoir avoir une image principale et des images supplémentaires.
-Livrables : Upload fonctionnel avec stockage local ou cloud.
-Astuces : Utilisez multer pour Node.js ou une solution équivalente en PHP. Ressources : https://developer.mozilla.org/en-US/docs/Web/API/File
+Complétez le `.env` :
 
+```env
+PORT=5000
 
-## MODULE 10 – Sécurité
-Objectif pédagogique : Sécuriser les données et l’application web.
-Énoncé : Implémenter validation des formulaires, protection XSS et contre injections SQL.
-Livrables : Application sécurisée avec tests sur données invalides.
-Astuces : Sanitize inputs et utiliser ORM pour réduire les risques d’injection SQL.
-Ressources : https://owasp.org
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=votre_mot_de_passe
+DB_NAME=leboncorner
 
-## MODULE 11 – Accessibilité et UX
-Objectif pédagogique : Respecter les standards d’accessibilité et améliorer l’expérience utilisateur.
-Énoncé : Implémenter contraste, navigation clavier, labels de formulaires. Livrables : Interface accessible avec audit Lighthouse ou outils WCAG.
-Astuces : Testez votre site sur mobile et clavier, pas seulement avec la souris.
-Ressources : https://www.w3.org/WAI
- 
-## MODULE 12 – Déploiement
-Objectif pédagogique : Mettre en production l’application complète.
-Énoncé : Déployer frontend, backend et base de données sur serveur ou cloud.
-Livrables : Application accessible en ligne avec documentation.
-Astuces : Utilisez services cloud comme Heroku, Render, ou un VPS pour déploiement complet.
-Ressources :
-https://developer.mozilla.org/en-US/docs/Learn/Server-side/Deploying
+MONGODB_URI=mongodb://localhost:27017/leboncorner
 
---- 
+JWT_SECRET=une_chaine_secrete_longue
+JWT_REFRESH_SECRET=une_autre_chaine_secrete
 
-Objectif final pédagogique
-À l’issue des 12 modules, l’apprenant doit :
--	identifier ses lacunes
--	retravailler les modules correspondants
--	assembler les briques techniques
--	produire une application complète de petites annonces Durée projet final : 15 jours.
+CLIENT_URL=http://localhost:5173
+
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USER=votre.adresse@gmail.com
+MAIL_PASS=xxxx xxxx xxxx xxxx
+MAIL_FROM=votre.adresse@gmail.com
+```
+
+```bash
+npm run dev   # nodemon
+npm start     # production
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+L'app tourne sur **http://localhost:5173**.  
+Les appels `/api/*` sont proxifiés vers `http://localhost:5000`.
+
+---
+
+## Structure
+
+```
+LeBonCorner/
+├── backend/
+│   ├── config/          # Connexions MySQL et MongoDB
+│   ├── controllers/     # Logique métier
+│   ├── repositories/    # Requêtes SQL / Mongoose
+│   ├── routes/          # Déclaration des endpoints
+│   ├── middlewares/     # Auth JWT, validation, rôles, erreurs
+│   ├── validators/      # Schémas Joi
+│   ├── services/        # Envoi d'emails (Nodemailer)
+│   ├── errors/          # Classes d'erreurs (AppError, UnauthorizedError…)
+│   └── server.js
+│
+└── frontend/
+    └── src/
+        ├── api/          # Instance Axios + intercepteurs
+        ├── context/      # AuthContext · AccessibilityContext
+        ├── hooks/        # useAnnonces
+        ├── components/   # AnnonceCard · SearchFilterBar · AccessibilityPanel…
+        └── pages/        # Login · Register · ForgotPassword · ResetPassword · Home · Profile
+```
+
+---
+
+## API
+
+### Auth — `/api/auth`
+
+| Méthode | Route | Description |
+|---|---|---|
+| POST | `/register` | Inscription |
+| POST | `/login` | Connexion |
+| POST | `/refresh` | Renouvelle l'access token via cookie |
+| POST | `/logout` | Déconnexion |
+| POST | `/forgot-password` | Envoie un lien de réinitialisation par email |
+| POST | `/reset-password` | Réinitialise le mot de passe avec le token |
+
+### Profil — `/api/profil` *(authentifié)*
+
+| Méthode | Route | Description |
+|---|---|---|
+| GET | `/` | Récupérer son profil |
+| PUT | `/` | Modifier nom et/ou email |
+| DELETE | `/` | Supprimer son compte |
+
+### Annonces — `/api/posts` *(authentifié)*
+
+| Méthode | Route | Description |
+|---|---|---|
+| GET | `/` | Toutes les annonces |
+| GET | `/search?q=&category_id=&min_price=&max_price=` | Recherche filtrée |
+| GET | `/:id` | Détail d'une annonce |
+| POST | `/` | Créer une annonce |
+| PUT | `/:id` | Modifier une annonce |
+| DELETE | `/:id` | Supprimer une annonce |
+
+### Conversations — `/api/conversations` *(authentifié)*
+
+| Méthode | Route | Description |
+|---|---|---|
+| GET | `/` | Mes conversations |
+| POST | `/` | Créer une conversation |
+| GET | `/:id` | Détail (réservé aux participants) |
+| POST | `/:id/messages` | Envoyer un message |
+| POST | `/:id/messages/:messageId/reactions` | Ajouter une réaction |
+
+---
+
+## Pages
+
+| URL | Description | Accès |
+|---|---|---|
+| `/login` | Connexion | Public |
+| `/register` | Inscription | Public |
+| `/forgot-password` | Demande de réinitialisation | Public |
+| `/reset-password?token=` | Nouveau mot de passe | Public |
+| `/` | Liste et recherche d'annonces | Authentifié |
+| `/profil` | Gestion du profil | Authentifié |
