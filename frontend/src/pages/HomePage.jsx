@@ -1,13 +1,13 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import AnnonceList from '../components/AnnonceList'
 import { useAnnonces } from '../hooks/useAnnonces'
 import SearchFilterBar from '../components/SearchFilterBar'
+import AnnonceList from '../components/AnnonceList'
 
 export default function HomePage() {
   const { user, logout } = useAuth()
-  const { annonces, categories, isLoading, error, search, setSearch, minPrice, setMinPrice, maxPrice, setMaxPrice, categoryId, setCategoryId } = useAnnonces()
   const navigate = useNavigate()
+  const { annonces, total, categories, isLoading, error, ...filterProps } = useAnnonces()
 
   async function handleLogout() {
     await logout()
@@ -15,37 +15,50 @@ export default function HomePage() {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.topBar}>
-        <h1 style={styles.heading}>LeBonCorner</h1>
-        <div style={styles.userInfo}>
-          <span style={styles.userName}>{user?.name}</span>
-          <button onClick={handleLogout} style={styles.logoutBtn}>Se déconnecter</button>
+    <div>
+      <nav style={styles.navbar}>
+        <div style={styles.navInner}>
+          <div style={styles.brand}>
+            <img src="/logo.png" alt="LeBonCorner" style={styles.logo} />
+            <span style={styles.brandName}>LeBonCorner</span>
+          </div>
+          <div style={styles.userInfo}>
+            <Link to="/profil" style={styles.profilLink}>Mon profil</Link>
+            <button onClick={handleLogout} style={styles.logoutBtn}>Se déconnecter</button>
+          </div>
         </div>
-      </div>
+      </nav>
 
-      <h2 style={styles.subheading}>
-        Les annonces
-      </h2>
+      <main style={styles.main}>
+        <div style={styles.container}>
+          <h2 style={styles.subheading}>
+            Les annonces {!isLoading && <span style={styles.counter}>({total})</span>}
+          </h2>
 
-      <SearchFilterBar categories={categories} search={search} setSearch={setSearch} minPrice={minPrice} setMinPrice={setMinPrice} maxPrice={setMaxPrice} setMaxPrice={setMaxPrice} categoryId={categoryId} setCategoryId={setCategoryId} />
+          <SearchFilterBar categories={categories} {...filterProps} />
 
-      {isLoading && <p style={styles.info}>Chargement des annonces...</p>}
-      {error && <p style={styles.error}>Erreur : {error}</p>}
-      {!isLoading && !error && <AnnonceList annonces={annonces} />}
+          {isLoading && <p style={styles.info}>Chargement des annonces...</p>}
+          {error && <p style={styles.error}>Erreur : {error}</p>}
+          {!isLoading && !error && <AnnonceList annonces={annonces} />}
+        </div>
+      </main>
     </div>
   )
 }
 
 const styles = {
-  container: { maxWidth: 800, margin: '40px auto', padding: '0 16px', fontFamily: 'sans-serif' },
-  topBar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
-  heading: { margin: 0, fontSize: 28 },
-  userInfo: { display: 'flex', alignItems: 'center', gap: 12 },
-  userName: { color: '#6b7280', fontSize: 14 },
-  logoutBtn: { padding: '8px 16px', fontSize: 14, background: '#dc2626', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer' },
-  subheading: { fontSize: 20, marginBottom: 16 },
-  counter: { color: '#6b7280', fontWeight: 'normal' },
-  info: { color: '#6b7280', textAlign: 'center', padding: '40px 0' },
-  error: { color: '#dc2626', textAlign: 'center', padding: '20px 0' },
+  navbar:    { background: '#fff', borderBottom: '2px solid #fed7aa', padding: '0 24px' },
+  navInner:  { maxWidth: 900, margin: '0 auto', height: 64, display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+  brand:     { display: 'flex', alignItems: 'center', gap: 10 },
+  logo:      { height: 40, width: 'auto' },
+  brandName: { fontSize: 22, fontWeight: 700, color: '#ea580c' },
+  userInfo:   { display: 'flex', alignItems: 'center', gap: 16 },
+  profilLink: { fontSize: 14, color: '#ea580c', textDecoration: 'none', fontWeight: 500 },
+  logoutBtn:  { padding: '8px 16px', fontSize: 14, fontWeight: 600, background: '#ea580c', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer' },
+  main:      { padding: '32px 16px' },
+  container: { maxWidth: 900, margin: '0 auto' },
+  subheading: { fontSize: 20, fontWeight: 700, color: '#111827', marginTop: 0, marginBottom: 16 },
+  counter:   { color: '#9ca3af', fontWeight: 'normal', fontSize: 16 },
+  info:      { color: '#6b7280', textAlign: 'center', padding: '60px 0' },
+  error:     { color: '#dc2626', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, padding: '12px 16px', textAlign: 'center' },
 }

@@ -5,8 +5,6 @@ export default function AnnonceList({ annonces }) {
     return <p style={{ color: '#6b7280', textAlign: 'center', padding: '40px 0' }}>Aucune annonce ne correspond à votre recherche.</p>
   }
 
-  console.log(annonces)
-
   return (
     <div>
       {annonces.map((annonce) => (

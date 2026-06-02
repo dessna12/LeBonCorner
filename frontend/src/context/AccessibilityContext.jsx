@@ -13,7 +13,7 @@ export function AccessibilityProvider({children}) {
   }, [highContrast])
   
   useEffect(() => {
-    document.documentElement.style.setProperty('--text-zoom', textZoom)
+    document.body.style.zoom = textZoom
   }, [textZoom])
 
   useEffect(()=> {

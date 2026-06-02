@@ -43,4 +43,17 @@ async function saveResetToken(email, token, expiresAt) {
   );
 }
 
+async function update(id, { name, email }) {
+  // COALESCE garde l'ancienne valeur si le nouveau paramètre est NULL
+  await db.execute(
+    'UPDATE User SET name = COALESCE(?, name), email = COALESCE(?, email) WHERE id = ?',
+    [name ?? null, email ?? null, id]
+  );
+  return findById(id);
+}
+
+async function remove(id) {
+  await db.execute('DELETE FROM User WHERE id = ?', [id]);
+}
+
 module.exports = userRepository;
